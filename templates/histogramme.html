@@ -1,43 +1,46 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8" />
-    <title>Metrique</title>
+    <title>Graphique à colonnes avec Google Charts</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      // Chargement de la bibliothèque et du package 'corechart'
+      google.charts.load('current', { packages: ['corechart'] });
+      google.charts.setOnLoadCallback(drawChart);
+
+      // Fonction pour dessiner le graphique
+      function drawChart() {
+        // Données du graphique
+        var data = google.visualization.arrayToDataTable([
+          ['Année', 'Ventes', { role: 'style' }],
+          ['2019', 1000, 'color: #76A7FA'],
+          ['2020', 1170, 'color: #76A7FA'],
+          ['2021', 660, 'color: #76A7FA'],
+          ['2022', 1030, 'color: #76A7FA']
+        ]);
+
+        // Options de configuration
+        var options = {
+          title: 'Performance des ventes par année',
+          hAxis: {
+            title: 'Année',
+            titleTextStyle: { color: '#333' }
+          },
+          vAxis: {
+            minValue: 0
+          },
+          legend: { position: 'none' }
+        };
+
+        // Création et rendu du graphique
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
   </head>
   <body>
-    
-  <script type="text/javascript">
-    google.charts.load("current", {packages:['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
-    function drawChart() {
-      var data = google.visualization.arrayToDataTable([
-        ["Element", "Density", { role: "style" } ],
-        ["Copper", 8.94, "#b87333"],
-        ["Silver", 10.49, "silver"],
-        ["Gold", 19.30, "gold"],
-        ["Platinum", 21.45, "color: #e5e4e2"]
-      ]);
-
-      var view = new google.visualization.DataView(data);
-      view.setColumns([0, 1,
-                       { calc: "stringify",
-                         sourceColumn: 1,
-                         type: "string",
-                         role: "annotation" },
-                       2]);
-
-      var options = {
-        title: "Density of Precious Metals, in g/cm^3",
-        width: 600,
-        height: 400,
-        bar: {groupWidth: "95%"},
-        legend: { position: "none" },
-      };
-      var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
-      chart.draw(view, options);
-  }
-  </script>
-<div id="columnchart_values" style="width: 900px; height: 300px;"></div>
-    
+    <h1>Graphique à colonnes</h1>
+    <!-- Conteneur pour le graphique -->
+    <div id="chart_div" style="width: 800px; height: 600px;"></div>
   </body>
 </html>
