@@ -1,23 +1,35 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Graphique à colonnes avec Google Charts</title>
+    <title>Graphique à colonnes avec Google Charts et API</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       // Chargement de la bibliothèque et du package 'corechart'
       google.charts.load('current', { packages: ['corechart'] });
-      google.charts.setOnLoadCallback(drawChart);
+      google.charts.setOnLoadCallback(fetchData);
+
+      // Récupération de données depuis notre API /tawarano/
+      function fetchData() {
+        fetch('/tawarano/')
+          .then((response) => response.json())
+          .then((data) => {
+            drawChart(data);
+          })
+          .catch((error) => {
+            console.error('Erreur lors de la récupération des données:', error);
+          });
+      }
 
       // Fonction pour dessiner le graphique
-      function drawChart() {
+      function drawChart(apiData) {
+        // Transformation des données API en tableau compatible avec Google Charts
+        var dataArray = [['Année', 'Ventes', { role: 'style' }]];
+        apiData.forEach((item) => {
+          dataArray.push([item.annee, item.ventes, 'color: #76A7FA']);
+        });
+
         // Données du graphique
-        var data = google.visualization.arrayToDataTable([
-          ['Année', 'Ventes', { role: 'style' }],
-          ['2019', 1000, 'color: #76A7FA'],
-          ['2020', 1170, 'color: #76A7FA'],
-          ['2021', 660, 'color: #76A7FA'],
-          ['2022', 1030, 'color: #76A7FA']
-        ]);
+        var data = google.visualization.arrayToDataTable(dataArray);
 
         // Options de configuration
         var options = {
