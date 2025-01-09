@@ -1,35 +1,25 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <title>Graphique à colonnes avec Google Charts et API</title>
+    <meta charset="UTF-8" />
+    <title>Metrique</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  </head>
+  <body>
     <script type="text/javascript">
       // Chargement de la bibliothèque et du package 'corechart'
       google.charts.load('current', { packages: ['corechart'] });
-      google.charts.setOnLoadCallback(fetchData);
-
-      // Récupération de données depuis notre API /tawarano/
-      function fetchData() {
-        fetch('/tawarano/')
-          .then((response) => response.json())
-          .then((data) => {
-            drawChart(data);
-          })
-          .catch((error) => {
-            console.error('Erreur lors de la récupération des données:', error);
-          });
-      }
+      google.charts.setOnLoadCallback(drawChart);
 
       // Fonction pour dessiner le graphique
-      function drawChart(apiData) {
-        // Transformation des données API en tableau compatible avec Google Charts
-        var dataArray = [['Année', 'Ventes', { role: 'style' }]];
-        apiData.forEach((item) => {
-          dataArray.push([item.annee, item.ventes, 'color: #76A7FA']);
-        });
-
+      function drawChart() {
         // Données du graphique
-        var data = google.visualization.arrayToDataTable(dataArray);
+        var data = google.visualization.arrayToDataTable([
+          ['Année', 'Ventes', { role: 'style' }],
+          ['2019', 1000, 'color: #76A7FA'],
+          ['2020', 1170, 'color: #76A7FA'],
+          ['2021', 660, 'color: #76A7FA'],
+          ['2022', 1030, 'color: #76A7FA']
+        ]);
 
         // Options de configuration
         var options = {
@@ -48,9 +38,15 @@
         var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
         chart.draw(data, options);
       }
+  // Récupération de données depuis notre API /tawarano/
+  fetch('/tawarano/')
+    .then(response => response.json())
+    .then(data => {
+      drawChart(data);
+    })
+}
     </script>
-  </head>
-  <body>
+
     <h1>Graphique à colonnes</h1>
     <!-- Conteneur pour le graphique -->
     <div id="chart_div" style="width: 800px; height: 600px;"></div>
